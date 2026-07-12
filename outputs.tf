@@ -1,3 +1,7 @@
+output "data_factory_linked_service_data_lake_storage_gen2s_id" {
+  description = "Map of id values across all data_factory_linked_service_data_lake_storage_gen2s, keyed the same as var.data_factory_linked_service_data_lake_storage_gen2s"
+  value       = { for k, v in azurerm_data_factory_linked_service_data_lake_storage_gen2.data_factory_linked_service_data_lake_storage_gen2s : k => v.id }
+}
 output "data_factory_linked_service_data_lake_storage_gen2s_additional_properties" {
   description = "Map of additional_properties values across all data_factory_linked_service_data_lake_storage_gen2s, keyed the same as var.data_factory_linked_service_data_lake_storage_gen2s"
   value       = { for k, v in azurerm_data_factory_linked_service_data_lake_storage_gen2.data_factory_linked_service_data_lake_storage_gen2s : k => v.additional_properties }
