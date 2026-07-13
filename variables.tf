@@ -39,56 +39,8 @@ EOT
     storage_account_key_key_vault_id            = optional(string)
     storage_account_key_key_vault_secret_name   = optional(string)
     tenant                                      = optional(string)
-    use_managed_identity                        = optional(bool) # Default: false
+    use_managed_identity                        = optional(bool)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        length(v.url) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        v.service_principal_id == null || (can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.service_principal_id)))
-      )
-    ])
-    error_message = "must be a valid UUID"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        v.service_principal_key == null || (length(v.service_principal_key) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        v.tenant == null || (length(v.tenant) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        v.description == null || (length(v.description) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.data_factory_linked_service_data_lake_storage_gen2s : (
-        v.integration_runtime_name == null || (length(v.integration_runtime_name) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_data_factory_linked_service_data_lake_storage_gen2's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -99,5 +51,23 @@ EOT
   #   source:    [from factories.ValidateFactoryID] !ok
   # path: data_factory_id
   #   source:    [from factories.ValidateFactoryID] err != nil
+  # path: url
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: service_principal_id
+  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
+  #   message:   must be a valid UUID
+  # path: service_principal_key
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: tenant
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: description
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: integration_runtime_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
